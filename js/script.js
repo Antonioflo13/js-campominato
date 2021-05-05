@@ -21,77 +21,95 @@
 // Buon pranzo e buon divertimento! :muscolo:
 
 // FUNCTIONS
+// Crea un numero casuale
 function randomNumber (min, max){
     var number = Math.floor(Math.random() * (max - min + 1) ) + min;
     return number;
 }
 
+// trova il duplicato
 function trovaDuplicato (numeroCasuale, array) {
-    for (var i = 0; i < array.length; i++)
-    if (numeroCasuale == array[i]) {
-        return true;
+    for (var i = 0; i < array.length; i++) {
+        if (numeroCasuale == array[i]) {
+            return true;
+        }
     }
+    return false;
 }
 
+// Per ogni livello ha un range diverso
 function livello (livello) {
+    var range;
     switch (livello) {
         case (0):
-            var range = 18;
+            range = 100;
         break;
         case (1):
-            var range = 80;
+            range = 80;
         break;
         case (2):
-            var range = 50;
+            range = 50;
         break;
     }
-    return range - 16;
+    return range;
 }
+
+
 
 // VARIABILI
 var bombe = [];
 var tentativi = [];
-var numeriGiocatore = [];
+var punteggio = [];
+var messaggio;
+
+
 
 // GIOCO
+// chiedo all'utente la selezione del livello
+do {
+    var selezionaLivello = parseInt(prompt("Inserisci un numero da 0 a 2 per scegliere la difficiltà!"));
+} while (isNaN (selezionaLivello) || selezionaLivello < 0 || selezionaLivello > 2);
+
+switch (selezionaLivello) {
+    case (0):
+        messaggio = 100;
+    break;
+    case (1):
+        messaggio = 50;
+    break;
+    case (2):
+        messaggio = 30;
+    break;
+}
 
 // genero numeri che non siano duplicati
 while (bombe.length < 16) {
-    var numeroPc = randomNumber(1, 100);
+    var numeroPc = randomNumber(1, messaggio);
     if (trovaDuplicato(numeroPc, bombe) != true) {
         bombe.push(numeroPc);
     }
-    console.log(bombe.length);
 }
-
 console.log(bombe);
 
-// chiedo all'utente la selezione del livello
-do {
-var selezionaLivello = parseInt(prompt("Inserisci un numero da 0 a 2 per scegliere la difficiltà!"));
-} while (isNaN (selezionaLivello) || selezionaLivello < 0 || selezionaLivello > 2) {
-}
+var range = livello(selezionaLivello);
 
-var selezionaLivello = livello(selezionaLivello);
-
-// chiedo all'utente un numero da 1 a 100
-tentativi.length = 0;
-do {
-    var numeroUtente = parseInt(prompt("Inserisci un numero da 1 a 100!"));
+// chiedo all'utente un numero da 1 a 30/50/100
+while(!trovaDuplicato(numeroUtente, bombe) && punteggio.length < (range - 16)) { // ripeto finchè l'utente ha perso o ha vinto
+    do {
+        var numeroUtente = parseInt(prompt("Inserisci un numero da 1 a " + messaggio));
+        console.log(tentativi);
+        console.log("Numero utente " + numeroUtente);
+    } while (isNaN(numeroUtente) || numeroUtente < 1 || numeroUtente > range || trovaDuplicato(numeroUtente, tentativi));
     tentativi.push(numeroUtente);
-    console.log(tentativi);
-    console.log("Numero utente " + numeroUtente);
-} while (isNaN (numeroUtente) || numeroUtente < 1 || numeroUtente > 100 || tentativi.length < selezionaLivello) {
-    tentativi.length ++;
+    punteggio.push(numeroUtente);
+    
 }
 
-for (i = 0; i < tentativi.length; i++) {
-    if (trovaDuplicato (numeroUtente, tentativi) != true) {
-        tentativi.pop(numeroUtente);
-    } 
-}
-
+console.log("Hai perso! il tuo punteggio è di " + (punteggio.length - 1));
 console.log(tentativi);
+
+
+
 // cerco i duplicati nei due array
 
 
