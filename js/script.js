@@ -59,7 +59,6 @@ function livello (livello) {
 // VARIABILI
 var bombe = [];
 var tentativi = [];
-var punteggio = [];
 var messaggio;
 
 
@@ -69,18 +68,6 @@ var messaggio;
 do {
     var selezionaLivello = parseInt(prompt("Inserisci un numero da 0 a 2 per scegliere la difficiltà!"));
 } while (isNaN (selezionaLivello) || selezionaLivello < 0 || selezionaLivello > 2);
-
-switch (selezionaLivello) {
-    case (0):
-        messaggio = 100;
-    break;
-    case (1):
-        messaggio = 50;
-    break;
-    case (2):
-        messaggio = 30;
-    break;
-}
 
 // genero numeri che non siano duplicati
 while (bombe.length < 16) {
@@ -94,19 +81,24 @@ console.log(bombe);
 var range = livello(selezionaLivello);
 
 // chiedo all'utente un numero da 1 a 30/50/100
-while(!trovaDuplicato(numeroUtente, bombe) && punteggio.length < (range - 16)) { // ripeto finchè l'utente ha perso o ha vinto
+var gameOver = false;
+while(tentativi.length < (range - 16) && gameOver == false) { // ripeto finchè l'utente ha perso o ha vinto
     do {
-        var numeroUtente = parseInt(prompt("Inserisci un numero da 1 a " + messaggio));
+        var numeroUtente = parseInt(prompt("Inserisci un numero da 1 a " + range));
         console.log(tentativi);
         console.log("Numero utente " + numeroUtente);
-    } while (isNaN(numeroUtente) || numeroUtente < 1 || numeroUtente > range || trovaDuplicato(numeroUtente, tentativi));
-    tentativi.push(numeroUtente);
-    punteggio.push(numeroUtente);
-    
-}
+    } while (isNaN(numeroUtente) || numeroUtente < 1 || numeroUtente > range);
 
-console.log("Hai perso! il tuo punteggio è di " + (punteggio.length - 1));
-console.log(tentativi);
+    if (trovaDuplicato(numeroUtente, bombe)) {
+        gameOver = true;
+        console.log("Hai perso! il tuo punteggio è di " + (tentativi.length - 1));
+    } else if (!trovaDuplicato(numeroUtente, bombe)) {
+        tentativi.push(numeroUtente);
+    }
+}
+if (tentativi.length == (range - 16)) {
+    console.log("Complimenti! il tuo punteggio è di " + (tentativi.length - 1));
+}
 
 
 
